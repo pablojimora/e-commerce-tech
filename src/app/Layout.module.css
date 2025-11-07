@@ -1,0 +1,127 @@
+.container {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+  font-family: 'Inter', sans-serif;
+  background-color: #fff;
+  color: #111;
+  padding-left: 100px;
+  padding-right: 100px;
+
+}
+
+.header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 1rem 2rem;
+  border-bottom: 1px solid #e5e5e5;
+  position: sticky;
+  top: 0;
+  background: white;
+  z-index: 10;
+}
+
+.logo {
+  font-weight: 600;
+  font-size: 1rem;
+}
+
+.nav a {
+  margin: 0 1rem;
+  color: #333;
+  text-decoration: none;
+  font-size: 0.95rem;
+}
+
+.nav a:hover {
+  color: #0070f3;
+}
+
+.search {
+  display: flex;
+  align-items: center;
+  border: 1px solid #ccc;
+  border-radius: 6px;
+  overflow: hidden;
+}
+
+.search input {
+  border: none;
+  outline: none;
+  padding: 0.5rem 0.75rem;
+}
+
+.search button {
+  border: none;
+  background: none;
+  padding: 0.5rem;
+  cursor: pointer;
+}
+
+.main {
+  flex: 1;
+  padding: 2rem;
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+.footer {
+  background-color: #f8f8f8;
+  padding: 2rem;
+  border-top: 1px solid #e5e5e5;
+}
+
+.footerTop {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 1.5rem;
+  font-size: 0.9rem;
+}
+
+.social span {
+  margin: 0 0.5rem;
+  cursor: pointer;
+}
+
+.footerBottom {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.footerBottom nav a {
+  margin-right: 1rem;
+  color: #333;
+  text-decoration: none;
+  font-size: 0.9rem;
+}
+
+.footerBottom nav a:hover {
+  color: #0070f3;
+}
+
+.subscribe {
+  display: flex;
+}
+
+.subscribe input {
+  border: 1px solid #ccc;
+  border-radius: 4px 0 0 4px;
+  padding: 0.5rem;
+  outline: none;
+}
+
+.subscribe button {
+  background-color: #111;
+  color: white;
+  border: none;
+  padding: 0.5rem 1rem;
+  border-radius: 0 4px 4px 0;
+  cursor: pointer;
+}
+
+.subscribe button:hover {
+  background-color: #333;
+}
