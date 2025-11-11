@@ -10,7 +10,7 @@ export default function HomePage() {
     required: true, // 🔒 obliga a tener sesión
     onUnauthenticated() {
       // Si no hay sesión, redirige al login
-      router.push("/login");
+      // router.push("/login");
     },
   });
 
