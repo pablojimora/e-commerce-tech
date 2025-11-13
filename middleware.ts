@@ -9,6 +9,8 @@ export async function middleware(req: NextRequest) {
     secret: process.env.NEXTAUTH_SECRET,
   });
 
+  console.log(token)
+
   const { pathname } = req.nextUrl;
 
   // No aplica middleware a recursos estáticos ni API públicas
