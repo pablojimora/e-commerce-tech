@@ -14,50 +14,102 @@
   display: flex;
   justify-content: space-between;
   align-items: center;
-  padding: 1rem 2rem;
+  padding: 0.75rem 1.5rem;
   border-bottom: 1px solid #e5e5e5;
   position: sticky;
   top: 0;
   background: white;
   z-index: 10;
+  gap: 2rem;
 }
 
+.leftSection{
+  display: flex;
+  align-items: center;
+  gap: 1.5rem;
+}
+/* Logo un poco más visible */
 .logo {
-  font-weight: 600;
-  font-size: 1rem;
+  font-weight: 700;
+  font-size: 1.1rem;
+  color: #111;
+}
+
+/* Navegación central con mejor espaciado */
+.nav {
+  display: flex;
+  align-items: center;
+  gap: 1.5rem;
+  flex-wrap: nowrap;
 }
 
 .nav a {
-  margin: 0 1rem;
   color: #333;
   text-decoration: none;
   font-size: 0.95rem;
+  font-weight: 500;
+  transition: color 0.2s ease;
 }
 
 .nav a:hover {
   color: #0070f3;
 }
 
+/* Contenedor derecho: sesión + buscador */
+.headerRight {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+
+/* Estilo del buscador */
 .search {
   display: flex;
   align-items: center;
   border: 1px solid #ccc;
-  border-radius: 6px;
+  border-radius: 8px;
   overflow: hidden;
+  height: 36px;
+  background: #fafafa;
 }
 
 .search input {
   border: none;
   outline: none;
-  padding: 0.5rem 0.75rem;
+  padding: 0.4rem 0.75rem;
+  font-size: 0.9rem;
+  width: 160px;
+  background: transparent;
 }
 
 .search button {
   border: none;
   background: none;
-  padding: 0.5rem;
+  padding: 0.4rem 0.6rem;
   cursor: pointer;
+  font-size: 1rem;
+  color: #555;
 }
+
+/* Botón de inicio/cierre de sesión */
+.header a,
+.header button {
+  font-size: 0.9rem;
+  padding: 0.4rem 0.9rem;
+  border-radius: 6px;
+  border: 1px solid #111;
+  background-color: #111;
+  color: #fff;
+  text-decoration: none;
+  transition: all 0.25s ease;
+}
+
+.header a:hover,
+.header button:hover {
+  background-color: #fff;
+  color: #111;
+}
+
 
 .main {
   flex: 1;

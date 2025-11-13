@@ -4,6 +4,7 @@ import React, { useState } from "react";
 import styles from "./form.module.css";
 import { sendEmail } from "@/services/sendEmail";
 import { EmailTemplate } from "../emailTemplate/EmailTemplate";
+import { MiButton } from "../MiButton/MyButton";
 
 export const SendEmailForm: React.FC = () => {
   const [formData, setFormData] = useState({
@@ -115,9 +116,7 @@ export const SendEmailForm: React.FC = () => {
           className={styles.textarea}
         />
 
-        <button type="submit" className={styles.button}>
-          Enviar correo
-        </button>
+        <MiButton text="Enviar correo" type="submit" />
 
         {errors.length > 0 && (
           <ul className={styles.errorList}>
