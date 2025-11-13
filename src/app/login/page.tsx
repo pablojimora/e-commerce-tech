@@ -1,7 +1,10 @@
 "use client";
+
 import { signIn, useSession } from "next-auth/react";
 import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
+import { MiButton } from "../components/MiButton/MyButton";
+import { LogIn } from "lucide-react";
 
 export default function LoginPage() {
   const router = useRouter();
@@ -10,6 +13,7 @@ export default function LoginPage() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState<string | null>(null);
+  const [loading, setLoading] = useState(false);
 
   useEffect(() => {
     if (status === "authenticated") router.push("/dashboard");
@@ -17,11 +21,14 @@ export default function LoginPage() {
 
   const handleLogin = async (e: React.FormEvent) => {
     e.preventDefault();
+    setLoading(true);
     const result = await signIn("credentials", {
       redirect: false,
       email,
       password,
     });
+    setLoading(false);
+
     if (result?.error) setError(result.error);
     else router.push("/dashboard");
   };
@@ -31,43 +38,62 @@ export default function LoginPage() {
   };
 
   return (
-    <div className="flex items-center justify-center min-h-screen bg-gray-100 p-4">
-      <div className="bg-white p-8 rounded-2xl shadow-lg w-full max-w-md flex flex-col gap-4">
-        <h1 className="text-center text-2xl font-bold text-gray-900">Iniciar Sesión</h1>
+    <div className="flex items-center justify-center min-h-[80vh] px-6">
+      <div className="w-full max-w-lg flex flex-col gap-8">
+        {/* Título */}
+        <h1 className="text-center text-3xl font-semibold text-gray-900 tracking-tight">
+          Iniciar Sesión
+        </h1>
 
-        <form onSubmit={handleLogin} className="flex flex-col gap-4">
-          <input
-            type="email"
-            placeholder="Correo"
-            value={email}
-            onChange={(e) => setEmail(e.target.value)}
-            className="p-3 border border-gray-300 rounded-lg text-base focus:outline-none focus:ring-2 focus:ring-gray-400"
-          />
-          <input
-            type="password"
-            placeholder="Contraseña"
-            value={password}
-            onChange={(e) => setPassword(e.target.value)}
-            className="p-3 border border-gray-300 rounded-lg text-base focus:outline-none focus:ring-2 focus:ring-gray-400"
-          />
-          <button
+        {/* Formulario */}
+        <form onSubmit={handleLogin} className="flex flex-col gap-6">
+          <div className="flex flex-col gap-2">
+            <label className="text-sm font-medium text-gray-700">Correo</label>
+            <input
+              type="email"
+              placeholder="tu@email.com"
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
+              className="p-3 border border-gray-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-gray-800"
+              required
+            />
+          </div>
+
+          <div className="flex flex-col gap-2">
+            <label className="text-sm font-medium text-gray-700">Contraseña</label>
+            <input
+              type="password"
+              placeholder="••••••••"
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
+              className="p-3 border border-gray-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-gray-800"
+              required
+            />
+          </div>
+
+          {/* Botón de inicio de sesión */}
+          <MiButton
             type="submit"
-            className="bg-gray-900 text-white p-3 rounded-lg font-bold hover:bg-gray-800 transition-colors"
-          >
-            Iniciar sesión
-          </button>
+            variant="primary"
+            text="Iniciar sesión"
+            loading={loading}
+            leftIcon={<LogIn size={18} />}
+          />
         </form>
 
-        <div className="text-center text-gray-600 my-2">O</div>
+        {/* Separador */}
+        <div className="text-center text-gray-500 text-sm font-medium">o</div>
 
-        <button
+        {/* Login con Google */}
+        <MiButton
+          variant="danger"
+          text="Login con Google"
           onClick={handleGoogleLogin}
-          className="bg-red-600 text-white p-3 rounded-lg font-bold hover:bg-red-700 transition-colors"
-        >
-          Login con Google
-        </button>
+        />
 
-        {error && <p className="text-red-600 text-center mt-2">{error}</p>}
+        {error && (
+          <p className="text-red-600 text-center text-sm mt-2">{error}</p>
+        )}
       </div>
     </div>
   );
