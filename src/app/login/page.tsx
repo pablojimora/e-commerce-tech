@@ -3,7 +3,7 @@
 import { signIn, useSession } from "next-auth/react";
 import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
-import { MiButton } from "../components/MiButton/MyButton";
+import { MiButton } from "../components/MiButton/MiButton";
 import { LogIn } from "lucide-react";
 
 export default function LoginPage() {

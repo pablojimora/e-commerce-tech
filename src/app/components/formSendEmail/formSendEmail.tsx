@@ -4,7 +4,7 @@ import React, { useState } from "react";
 import styles from "./form.module.css";
 import { sendEmail } from "@/services/sendEmail";
 import { EmailTemplate } from "../emailTemplate/EmailTemplate";
-import { MiButton } from "../MiButton/MyButton";
+import { MiButton } from "../MiButton/MiButton";
 
 export const SendEmailForm: React.FC = () => {
   const [formData, setFormData] = useState({

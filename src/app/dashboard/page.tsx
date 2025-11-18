@@ -14,7 +14,8 @@ export default function HomePage() {
     },
   });
 
-  if (status === "loading") return <p>Cargando...</p>;
+  if (status === "loading") return <p>Debes iniciar sesión para entrar a esta vista</p>;
+
 
   return (
     <div className={styles.home}>
