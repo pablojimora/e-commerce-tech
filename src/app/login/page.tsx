@@ -3,8 +3,9 @@
 import { signIn, useSession } from "next-auth/react";
 import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
-import { MiButton } from "../components/MiButton/MiButton";
 import { LogIn } from "lucide-react";
+import { MiButton } from "@/app/components/MiButton/MiButton";
+import { useLanguage } from "@/contexts/LanguageContext";
 
 export default function LoginPage() {
   const router = useRouter();
@@ -14,6 +15,8 @@ export default function LoginPage() {
   const [password, setPassword] = useState("");
   const [error, setError] = useState<string | null>(null);
   const [loading, setLoading] = useState(false);
+
+  const {t} = useLanguage();
 
   useEffect(() => {
     if (status === "authenticated") router.push("/dashboard");
@@ -42,16 +45,16 @@ export default function LoginPage() {
       <div className="w-full max-w-lg flex flex-col gap-8">
         {/* Título */}
         <h1 className="text-center text-3xl font-semibold text-gray-900 tracking-tight">
-          Iniciar Sesión
+          {t('loginPage.loginTitle')}
         </h1>
 
         {/* Formulario */}
         <form onSubmit={handleLogin} className="flex flex-col gap-6">
           <div className="flex flex-col gap-2">
-            <label className="text-sm font-medium text-gray-700">Correo</label>
+            <label className="text-sm font-medium text-gray-700">{t('loginPage.email')}</label>
             <input
               type="email"
-              placeholder="tu@email.com"
+              placeholder="tu@gmail.com"
               value={email}
               onChange={(e) => setEmail(e.target.value)}
               className="p-3 border border-gray-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-gray-800"
@@ -60,10 +63,10 @@ export default function LoginPage() {
           </div>
 
           <div className="flex flex-col gap-2">
-            <label className="text-sm font-medium text-gray-700">Contraseña</label>
+            <label className="text-sm font-medium text-gray-700">{t('loginPage.password')}</label>
             <input
               type="password"
-              placeholder="••••••••"
+              placeholder="Contraseña"
               value={password}
               onChange={(e) => setPassword(e.target.value)}
               className="p-3 border border-gray-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-gray-800"
@@ -72,10 +75,10 @@ export default function LoginPage() {
           </div>
 
           {/* Botón de inicio de sesión */}
-          <MiButton
+            <MiButton
             type="submit"
             variant="primary"
-            text="Iniciar sesión"
+            text={t('loginPage.loginTitle')}
             loading={loading}
             leftIcon={<LogIn size={18} />}
           />
@@ -87,9 +90,10 @@ export default function LoginPage() {
         {/* Login con Google */}
         <MiButton
           variant="danger"
-          text="Login con Google"
+          text={t('loginPage.loginWithGoogle')}
           onClick={handleGoogleLogin}
         />
+            <p className="text-center text-sm text-gray-500">{t('loginPage.noAccount')} <a href="/register" className="text-blue-400">{t('loginPage.register')}</a></p>
 
         {error && (
           <p className="text-red-600 text-center text-sm mt-2">{error}</p>

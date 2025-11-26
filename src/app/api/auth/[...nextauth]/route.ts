@@ -55,7 +55,28 @@ const handler = NextAuth({
             return true;
         },
         async jwt({ token, user }) {
-            if (user) token.role = (user as any).role || "user";
+            // If there's a freshly authenticated user, attach role and id to token
+            if (user) {
+                token.role = (user as any).role || "user";
+                token.id = (user as any).id || token.sub;
+                token.sub = (user as any).id || token.sub;
+            }
+
+            // If token lacks role or id (e.g., social login where user object has no role), fetch from DB by email
+            if ((!token.role || !token.id) && token?.email) {
+                try {
+                    await dbConnection();
+                    const dbUser = await Users.findOne({ email: token.email });
+                    if (dbUser) {
+                        token.role = token.role || dbUser.role || "user";
+                        token.id = token.id || dbUser._id.toString();
+                        token.sub = token.sub || dbUser._id.toString();
+                    }
+                } catch (err) {
+                    // ignore DB errors here - token will proceed without role
+                }
+            }
+
             return token;
         },
         async session({ session, token }) {

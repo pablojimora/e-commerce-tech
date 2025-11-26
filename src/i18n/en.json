@@ -1,0 +1,129 @@
+{
+  "formProduct": {
+    "name": "Name",
+    "brand": "Brand",
+    "category": "Category",
+    "selectCategory": "Select Category",
+    "price": "Price",
+    "quantity": "Quantity",
+    "status": "Status",
+    "image": "Image",
+    "electronics": "Electronics",
+    "computers": "Computers",
+    "accessories": "Accessories",
+    "audio": "Audio",
+    "gaming": "Gaming"
+  },
+  "sendEmail":{
+    "to":"To",
+    "subject":"Subject",
+    "message":"Message",
+    "send":"Send Email"
+  },
+  "headerSession":{
+    "login":"Log In",
+    "logout":"Log Out"
+  },
+  "loginPage":{
+    "loginTitle":"Log In",
+    "email":"Email",
+    "password":"Password",
+    "loginWithGoogle":"Log In with Google"
+    ,
+    "noAccount":"No account?",
+    "register":"Register"
+  },
+  "register":{
+    "title":"Create an account",
+    "name":"Name",
+    "email":"Email",
+    "password":"Password",
+    "confirm":"Confirm Password",
+    "create":"Create account"
+  },
+  "sidebarMenu":{
+    "products":"Products",
+    "dashboard":"Dashboard",
+    "cellphones":"Cellphones",
+    "sendEmail":"Send Email"
+  }
+  ,
+  "layout":{
+    "logo":"Copcity",
+    "searchPlaceholder":"Search products...",
+    "description":"Find modern technology with one click"
+  },
+  "footer":{
+    "copyright":"© 2025 YNS Demo. All rights reserved.",
+    "links":{
+      "accessories":"Accessories",
+      "cellphones":"Cellphones",
+      "technology":"Technology"
+    },
+    "subscribe":{
+      "placeholder":"Enter your email",
+      "button":"Subscribe"
+    }
+  },
+  "home":{
+    "welcome":"Welcome to Copcity.",
+    "description":"Find modern tech with us",
+    "cta":"Our Products"
+  },
+  "dashboard":{
+    "products":{
+      "filters":{
+        "brandPlaceholder":"Search by brand",
+        "categoryAll":"All categories"
+      },
+      "addButton":"Add product",
+      "noProducts":"No products found"
+    }
+  },
+  "product":{
+    "price":"Price",
+    "stock":"Stock",
+    "category":"Category",
+    "brand":"Brand",
+    "status":"Status",
+    "active":"Active",
+    "inactive":"Inactive",
+    "edit":"Edit",
+    "delete":"Delete",
+    "addToCart":"Add to cart"
+  },
+  "notifications":{
+    "productDeleted":"Product deleted successfully",
+    "productDeleteError":"Unable to delete product",
+    "cartAdded":"Product added to cart",
+    "loginRequired":"Please log in to use the cart"
+    ,"cartRemoved":"Product removed from cart",
+    "cartCleared":"Cart cleared"
+    ,"cartUpdated":"Cart updated",
+    "stockExceeded":"Insufficient stock"
+  },
+  "ui":{
+    "button":"Button",
+    "loading":"Loading..."
+  },
+  "cart":{
+    "title":"Your cart",
+    "empty":"Your cart is empty",
+    "total":"Total",
+    "quantity":"Quantity",
+    "available":"available",
+    "outOfStock":"Out of stock",
+    "summary":"Order Summary",
+    "subtotal":"Subtotal",
+    "items":"Items",
+    "checkout":"Proceed to checkout",
+    "continueShopping":"Continue shopping"
+  },
+  "pagination":{
+    "previous":"Previous",
+    "next":"Next",
+    "showing":"Showing",
+    "of":"of",
+    "products":"products"
+  }
+}

@@ -1,10 +1,12 @@
-"use client";
+  "use client";
 
 import React, { useState } from "react";
 import styles from "./form.module.css";
 import { sendEmail } from "@/services/sendEmail";
 import { EmailTemplate } from "../emailTemplate/EmailTemplate";
 import { MiButton } from "../MiButton/MiButton";
+import { useLanguage } from "@/contexts/LanguageContext";
+import { emailSchema } from "./validations";
 
 export const SendEmailForm: React.FC = () => {
   const [formData, setFormData] = useState({
@@ -16,81 +18,58 @@ export const SendEmailForm: React.FC = () => {
   const [errors, setErrors] = useState<string[]>([]);
   const [successMessage, setSuccessMessage] = useState<string>("");
 
-  // Actualiza inputs del formulario
+  const { t } = useLanguage();
+
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
     const { name, value } = e.target;
     setFormData({ ...formData, [name]: value });
   };
 
-  // Validación básica
-  const validateForm = (): string[] => {
-    const validationErrors: string[] = [];
-
-    if (!formData.to.trim()) {
-      validationErrors.push("El correo destinatario (to) es obligatorio.");
-    } else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(formData.to.trim())) {
-      validationErrors.push("El correo destinatario no es válido.");
-    }
-
-    if (!formData.subject.trim()) {
-      validationErrors.push("El asunto (subject) es obligatorio.");
-    } else if (formData.subject.trim().length < 5) {
-      validationErrors.push("El asunto debe tener al menos 5 caracteres.");
-    }
-
-    if (!formData.html.trim()) {
-      validationErrors.push("El contenido (html) es obligatorio.");
-    } else if (formData.html.trim().length < 10) {
-      validationErrors.push("El contenido debe tener al menos 10 caracteres.");
-    }
-
-    return validationErrors;
-  };
-
-  // Envío del formulario
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setSuccessMessage("");
-    const validationErrors = validateForm();
+    setErrors([]);
 
-    if (validationErrors.length > 0) {
-      setErrors(validationErrors);
-      return;
+    try {
+      // Validación Yup
+      await emailSchema.validate(formData, { abortEarly: false });
+
+      // Crear template HTML
+      const htmlTemplate = EmailTemplate({
+        subject: formData.subject,
+        message: formData.html,
+        sender: "Pablo Dev",
+      });
+
+      const response = await sendEmail({
+        to: formData.to,
+        subject: formData.subject,
+        html: htmlTemplate,
+      });
+
+      if (response.res === "Mensaje enviado") {
+        setSuccessMessage("¡Correo enviado exitosamente!");
+        setFormData({ to: "", subject: "", html: "" });
+      } else {
+        setErrors(["Error al enviar el correo."]);
+      }
+    } catch (err: any) {
+      if (err.inner) {
+        // ✔️ Yup errors
+        setErrors(err.inner.map((e: any) => e.message));
+      } else {
+        // Otros errores
+        setErrors(["⚠️ Ocurrió un error al enviar el correo."]);
+      }
     }
-    
-
-  try {
-    // 👇 Crea el HTML a partir de tu componente
-    const htmlTemplate = EmailTemplate({
-      subject: formData.subject,
-      message: formData.html,
-      sender: "Pablo Dev",
-    });
-
-    const response = await sendEmail({
-      to: formData.to,
-      subject: formData.subject,
-      html: htmlTemplate, // <-- lo envías al backend ya con estilo
-    });
-
-    if (response.res === "Mensaje enviado") {
-      setSuccessMessage("✅ ¡Correo enviado exitosamente!");
-      setFormData({ to: "", subject: "", html: "" });
-    } else {
-      setErrors(["❌ Error al enviar el correo."]);
-    }
-  } catch (error) {
-    console.error(error);
-    setErrors(["⚠️ Ocurrió un error al enviar el correo."]);
-  }
-};
-
+  };
+  
   return (
     <div className={styles.container}>
       <form onSubmit={handleSubmit} className={styles.form}>
-        <h2 className={styles.title}>Enviar correo</h2>
+        <h2 className={styles.title}>{t('sendEmail.send')}</h2>
 
-        <label className={styles.label}>Destinatario:</label>
+        <label className={styles.label}>{t('sendEmail.to')}</label>
         <input
           type="email"
           name="to"
@@ -99,7 +78,7 @@ export const SendEmailForm: React.FC = () => {
           className={styles.input}
         />
 
-        <label className={styles.label}>Asunto:</label>
+        <label className={styles.label}>{t('sendEmail.subject')}</label>
         <input
           type="text"
           name="subject"
@@ -108,7 +87,7 @@ export const SendEmailForm: React.FC = () => {
           className={styles.input}
         />
 
-        <label className={styles.label}>Contenido:</label>
+        <label className={styles.label}>{t('sendEmail.message')}</label>
         <textarea
           name="html"
           value={formData.html}
@@ -116,7 +95,7 @@ export const SendEmailForm: React.FC = () => {
           className={styles.textarea}
         />
 
-        <MiButton text="Enviar correo" type="submit" />
+        <MiButton text={t('sendEmail.send')} type="submit" />
 
         {errors.length > 0 && (
           <ul className={styles.errorList}>
@@ -133,6 +112,3 @@ export const SendEmailForm: React.FC = () => {
 };
 
 export default SendEmailForm;
-
-
-

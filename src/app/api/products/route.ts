@@ -6,19 +6,37 @@ import { Product } from "@/app/interfaces/products";
 // Conectamos a la base de datos una vez por cada invocación
 dbConnection();
 
-// GET - Obtener productos (opcionalmente filtrados por categoría o marca)
+// GET - Obtener productos (opcionalmente filtrados por categoría o marca) con paginación
 export async function GET(request: Request) {
   try {
     const { searchParams } = new URL(request.url);
     const category = searchParams.get("category");
     const brand = searchParams.get("brand");
+    const page = parseInt(searchParams.get("page") || "1", 10);
+    const limit = parseInt(searchParams.get("limit") || "12", 10);
 
     const filters: Record<string, unknown> = {};
     if (category) filters.category = category;
     if (brand) filters.brand = { $regex: new RegExp(brand, "i") };
 
-    const products = await Products.find(filters);
-    return NextResponse.json({ ok: true, data: products });
+    const skip = (page - 1) * limit;
+    const total = await Products.countDocuments(filters);
+    const products = await Products.find(filters)
+      .skip(skip)
+      .limit(limit)
+      .sort({ createdAt: -1 });
+
+    return NextResponse.json({
+      ok: true,
+      data: products,
+      pagination: {
+        currentPage: page,
+        totalPages: Math.ceil(total / limit),
+        totalProducts: total,
+        hasNextPage: page < Math.ceil(total / limit),
+        hasPrevPage: page > 1,
+      },
+    });
   } catch (error) {
     console.error(" Error en GET /api/products:", error);
     return NextResponse.json(
