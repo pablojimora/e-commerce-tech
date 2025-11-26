@@ -5,6 +5,7 @@ import { getProductById, updateProduct } from "@/services/products";
 import { useParams, useRouter } from "next/navigation";
 import FormProduct from "@/app/components/formProducts/FormProduct";
 import { Product } from "@/app/interfaces/products";
+import { useSession } from "next-auth/react";
 
 export default function EditProductPage() {
   const params = useParams();
@@ -13,6 +14,13 @@ export default function EditProductPage() {
 
   const [product, setProduct] = useState<Product | null>(null);
   const [loading, setLoading] = useState(true);
+
+  const { data: session, status } = useSession({
+      required: true,
+      onUnauthenticated() {
+        window.location.href = "/login";
+      },
+    });
 
   useEffect(() => {
     const load = async () => {

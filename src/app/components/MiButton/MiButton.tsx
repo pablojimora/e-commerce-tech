@@ -1,5 +1,6 @@
 "use client";
 import React from "react";
+import { useLanguage } from '@/contexts/LanguageContext';
 
 export interface MiButtonProps {
   variant?: "primary" | "secondary" | "danger";
@@ -30,6 +31,7 @@ export const MiButton: React.FC<MiButtonProps> = ({
   type = "button",
   className = "",
 }) => {
+  const { t } = useLanguage();
   const baseStyles =
     "inline-flex items-center justify-center gap-2 font-medium rounded-lg border transition-all duration-200 focus:outline-none disabled:opacity-50 disabled:cursor-not-allowed";
 
@@ -56,7 +58,7 @@ export const MiButton: React.FC<MiButtonProps> = ({
       className={`${baseStyles} ${variants[variant]} ${sizes[size]} ${className}`}
     >
       {leftIcon && <span className="flex items-center">{leftIcon}</span>}
-      {loading ? "Cargando..." : text}
+      {loading ? (t('ui.loading') || 'Cargando...') : text}
       {rightIcon && <span className="flex items-center">{rightIcon}</span>}
     </button>
   );

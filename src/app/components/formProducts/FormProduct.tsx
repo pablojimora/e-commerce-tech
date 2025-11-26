@@ -1,6 +1,10 @@
+'use client'
 import React, { useEffect, useState } from "react";
 import { MiButton } from "../MiButton/MiButton";
 import { Product } from "@/app/interfaces/products";
+import { uploadImage } from "@/services/upload";
+import { useLanguage } from '@/contexts/LanguageContext';
+
 
 export interface FormDataProps {
   name?: string;
@@ -30,6 +34,8 @@ export const FormProduct: React.FC<FormProductProps> = ({ data, isEditing, onSub
   });
 
   const [errors, setErrors] = useState<string[]>([]);
+  
+  const {t} = useLanguage();
 
   useEffect(() => {
     if (data) {
@@ -61,14 +67,16 @@ export const FormProduct: React.FC<FormProductProps> = ({ data, isEditing, onSub
     reader.readAsDataURL(file);
 
     reader.onloadend = async () => {
-      const res = await fetch("/api/upload", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ file: reader.result }),
-      });
+      const fileBase64 = reader.result as string;
 
-      const data = await res.json();
-      setFormData({ ...formData, imageUrl: data.url }); // Cloudinary URL
+      // Use upload service (axios)
+      const res = await uploadImage(fileBase64);
+      if ((res as any).url) {
+        setFormData((prev) => ({ ...prev, imageUrl: (res as any).url }));
+      } else {
+        // You can set an error state here if needed
+        console.error("Upload error:", (res as any).error || res);
+      }
     };
   };
 
@@ -111,7 +119,7 @@ export const FormProduct: React.FC<FormProductProps> = ({ data, isEditing, onSub
             {isEditing ? "Edit product" : "Add a new product"}
           </h2>
 
-          <label className="block text-sm font-medium mb-1">Name:</label>
+          <label className="block text-sm font-medium mb-1">{t('formProduct.name')}</label>
           <input
             type="text"
             name="name"
@@ -123,7 +131,7 @@ export const FormProduct: React.FC<FormProductProps> = ({ data, isEditing, onSub
         </div>
 
         <div>
-          <label className="block text-sm font-medium mb-1">Brand:</label>
+          <label className="block text-sm font-medium mb-1">{t('formProduct.brand')}</label>
           <input
             type="text"
             name="brand"
@@ -136,7 +144,7 @@ export const FormProduct: React.FC<FormProductProps> = ({ data, isEditing, onSub
 
 
         <div>
-          <label className="block text-sm font-medium mb-1">Category:</label>
+          <label className="block text-sm font-medium mb-1">{t('formProduct.category')}</label>
           <select
             name="category"
             value={formData.category}
@@ -144,18 +152,18 @@ export const FormProduct: React.FC<FormProductProps> = ({ data, isEditing, onSub
             className="w-full p-2 rounded-lg bg-slate-700 text-white outline-none focus:ring-2 focus:ring-indigo-400"
             required
           >
-            <option value="">Select a category</option>
-            <option value="Electrónica">Electrónica</option>
-            <option value="Computadores">Computadores</option>
-            <option value="Accesorios">Accesorios</option>
-            <option value="Audio">Audio</option>
-            <option value="Gaming">Gaming</option>
+            <option value="">{t('formProduct.selectCategory')}</option>
+            <option value="Electrónica">{t('formProduct.electronics')}</option>
+            <option value="Computadores">{t('formProduct.computers')}</option>
+            <option value="Accesorios">{t('formProduct.accessories')}</option>
+            <option value="Audio">{t('formProduct.audio')}</option>
+            <option value="Gaming">{t('formProduct.gaming')}</option>
           </select>
         </div>
 
 
         <div>
-          <label className="block text-sm font-medium mb-1">Quantity:</label>
+          <label className="block text-sm font-medium mb-1">{t('formProduct.quantity')}:</label>
           <input
             type="number"
             name="quantity"
@@ -167,7 +175,7 @@ export const FormProduct: React.FC<FormProductProps> = ({ data, isEditing, onSub
         </div>
 
         <div>
-          <label className="block text-sm font-medium mb-1">Price:</label>
+          <label className="block text-sm font-medium mb-1">{t('formProduct.price')}</label>
           <input
             type="number"
             name="price"
@@ -179,7 +187,7 @@ export const FormProduct: React.FC<FormProductProps> = ({ data, isEditing, onSub
         </div>
 
         <div>
-          <label className="block text-sm font-medium mb-1">Status:</label>
+          <label className="block text-sm font-medium mb-1">{t('formProduct.status')}</label>
           <select
             name="isActive"
             value={formData.isActive ? "true" : "false"}
@@ -188,13 +196,13 @@ export const FormProduct: React.FC<FormProductProps> = ({ data, isEditing, onSub
             }
             className="w-full p-2 rounded-lg bg-slate-700 text-white outline-none focus:ring-2 focus:ring-indigo-400"
           >
-            <option value="true">Active</option>
-            <option value="false">Inactive</option>
+            <option value="true">{t('product.active')}</option>
+            <option value="false">{t('product.inactive')}</option>
           </select>
         </div>
 
         <div>
-          <label className="block text-sm font-medium mb-1">Image:</label>
+          <label className="block text-sm font-medium mb-1">{t('formProduct.image')}</label>
 
           <input
             type="file"

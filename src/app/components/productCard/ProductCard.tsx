@@ -3,14 +3,51 @@
 import Image from "next/image";
 import { Product } from "@/app/interfaces/products";
 import { MiButton } from "../MiButton/MiButton";
+import { useSession } from "next-auth/react";
+import { useRouter } from 'next/navigation';
+import { useLanguage } from '@/contexts/LanguageContext';
+import { addToCart } from '@/services/cart';
+import { notification } from '@/app/helpers/notification';
+
 
 interface Props {
   product: Product;
   onEdit: (id: string) => void;
   onDelete: (id: string) => void;
+  onAddToCart?: (id: string) => void;
 }
 
-export default function ProductCard({ product, onEdit, onDelete }: Props) {
+export default function ProductCard({ product, onEdit, onDelete, onAddToCart }: Props) {
+  const { data: session, status } = useSession();
+  const { t } = useLanguage();
+      const router = useRouter();
+
+      const handleAdd = async () => {
+        // Require login
+        if (!session?.user) {
+          notification(t('notifications.loginRequired') || 'Please log in to use the cart', 'error');
+          router.push('/login');
+          return;
+        }
+        // If parent provided a handler, delegate
+        if (onAddToCart) return onAddToCart(product._id!);
+
+        try {
+          const res = await addToCart(product._id!, 1);
+          if (res?.error) notification(res.error, 'error');
+          else {
+            notification(t('notifications.cartAdded'), 'success');
+            if (typeof window !== 'undefined') window.dispatchEvent(new CustomEvent('cart-updated'));
+          }
+        } catch (err: any) {
+          notification(err?.message || 'Error', 'error');
+        }
+      };
+      // Guardar el role del usuario que inició sesión (si existe)
+      const role = (session?.user as any)?.role ?? undefined;
+
+      
+
   return (
     <div className="bg-[#111] rounded-xl shadow-lg border border-gray-800 overflow-hidden hover:scale-[1.02] transition-all">
       
@@ -61,22 +98,35 @@ export default function ProductCard({ product, onEdit, onDelete }: Props) {
 
       {/* Botones */}
       <div className="flex justify-between p-4 border-t border-gray-800 gap-3">
+        {role === 'admin' && (
+          <>
+            <MiButton
+              text={t('product.edit')}
+              variant="secondary"
+              size="sm"
+              onClick={() => onEdit(product._id!)}
+              className="w-full"
+            />
 
-        <MiButton
-          text="Editar"
-          variant="secondary"
-          size="sm"
-          onClick={() => onEdit(product._id!)}
-          className="w-full"
-        />
+            <MiButton
+              text={t('product.delete')}
+              variant="danger"
+              size="sm"
+              onClick={() => onDelete(product._id!)}
+              className="w-full"
+            />
+          </>
+        )}
 
-        <MiButton
-          text="Eliminar"
-          variant="danger"
-          size="sm"
-          onClick={() => onDelete(product._id!)}
-          className="w-full"
-        />
+        {role === 'user' && (
+          <MiButton
+            text={t('product.addToCart')}
+            variant="primary"
+            size="md"
+            onClick={() => handleAdd()}
+            className="w-full"
+          />
+        )}
 
       </div>
     </div>

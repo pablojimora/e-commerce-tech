@@ -8,14 +8,19 @@ const API_URL = "/api/products";
 /* ==========================
    GET - Listar o filtrar producto
    ========================== */
+   
 export const getProducts = async (filters?: {
   category?: string;
   brand?: string;
+  page?: number;
+  limit?: number;
 }): Promise<ApiResponse<Product[]>> => {
   try {
     const params = new URLSearchParams();
     if (filters?.category) params.append("category", filters.category);
     if (filters?.brand) params.append("brand", filters.brand);
+    if (filters?.page) params.append("page", filters.page.toString());
+    if (filters?.limit) params.append("limit", filters.limit.toString());
 
     const response = await axios.get(`${API_URL}?${params.toString()}`);
     return response.data;

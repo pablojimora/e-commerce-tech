@@ -7,6 +7,11 @@ import Providers from "./Providers";
 import HeaderSession from "./components/headerSession/HeaderSession";
 import SidebarMenu from "./components/sidebarmenu/SideBarMenu";
 
+import { LanguageProvider } from "@/contexts/LanguageContext";
+import { LanguageSwitcher } from "./components/languageSwitcher/LanguageSwitcher";
+import HeaderCart from "./components/cart/HeaderCart";
+import { ToastContainer } from "react-toastify";
+
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -27,6 +32,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
   return (
     <html lang="es">
       <body className={styles.container}>
+        <LanguageProvider>
         <Providers>
           {/* HEADER */}
           <header className={styles.header}>
@@ -36,16 +42,19 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
             </div>
 
             <div className={styles.search}>
-              <input type="text" placeholder="Buscar productos..." />
-              <button>🔍</button>
+              <LanguageSwitcher />
             </div>
 
             <div className={styles.rightSection}>
+              <div className="mr-3">
+                <HeaderCart />
+              </div>
               <HeaderSession />
             </div>
           </header>
 
           <main className={styles.main}>{children}</main>
+          <ToastContainer />
 
           {/* FOOTER (sin cambios) */}
           <footer className={styles.footer}>
@@ -70,7 +79,8 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
             </div>
           </footer>
         </Providers>
+        </LanguageProvider>
       </body>
     </html>
   );
-}
+} 

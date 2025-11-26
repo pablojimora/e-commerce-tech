@@ -1,0 +1,133 @@
+{
+  "formProduct": {
+    "name": "Nombre",
+    "brand": "Marca",
+    "category": "Categoría",
+    "selectCategory": "Seleccionar categoría",
+    "price": "Precio",
+    "quantity": "Cantidad",
+    "status": "Estado",
+    "image": "Imagen",
+    "electronics": "Electrónica",
+    "computers": "Computadores",
+    "accessories": "Accesorios",
+    "audio": "Audio",
+    "gaming": "Juegos",
+    "editTitle":"Editar producto",
+    "addTitle":"Agregar nuevo producto",
+    "update":"Actualizar producto",
+    "add":"Agregar producto"
+  },
+  "sendEmail":{
+    "to":"Para",
+    "subject":"Asunto",
+    "message":"Mensaje",
+    "send":"Enviar correo"
+  },
+    "sidebarMenu":{
+      "products":"Productos",
+      "dashboard":"Dashboard",
+      "cellphones":"Celulares",
+      "sendEmail":"Enviar correo"
+    },
+  "headerSession":{
+    "login":"Iniciar sesión",
+    "logout":"Cerrar sesión"
+  },
+  "loginPage":{
+    "loginTitle":"Iniciar Sesión",
+    "email":"Correo",
+    "password":"Contraseña",
+    "loginWithGoogle":"Iniciar sesión con Google"
+    ,
+    "noAccount":"¿No tienes cuenta?",
+    "register":"Registrarse"
+  }
+  ,
+  "register":{
+    "title":"Crear cuenta",
+    "name":"Nombre",
+    "email":"Correo",
+    "password":"Contraseña",
+    "confirm":"Confirmar contraseña",
+    "create":"Crear cuenta"
+  },
+  "layout":{
+    "logo":"Copcity",
+    "searchPlaceholder":"Buscar productos...",
+    "description":"Encuentra tecnología moderna en un clic"
+  },
+  "footer":{
+    "copyright":"© 2025 YNS Demo. Todos los derechos reservados.",
+    "links":{
+      "accessories":"Accesorios",
+      "cellphones":"Celulares",
+      "technology":"Tecnología"
+    },
+    "subscribe":{
+      "placeholder":"Ingresa tu correo electrónico",
+      "button":"Suscribirse"
+    }
+  },
+  "home":{
+    "welcome":"Bienvenido a Copcity.",
+    "description":"Encuentra todo lo semejante a tecnología con nosotros",
+    "cta":"Nuestros Productos"
+  },
+  "dashboard":{
+    "products":{
+      "filters":{
+        "brandPlaceholder":"Buscar por marca",
+        "categoryAll":"Todas las categorías"
+      },
+      "addButton":"Agregar producto",
+      "noProducts":"No se encontraron productos"
+    }
+  },
+  "product":{
+    "price":"Precio",
+    "stock":"Stock",
+    "category":"Categoría",
+    "brand":"Marca",
+    "status":"Estado",
+    "active":"Activo",
+    "inactive":"Inactivo",
+    "edit":"Editar",
+    "delete":"Eliminar",
+    "addToCart":"Añadir al carrito"
+  },
+  "notifications":{
+    "productDeleted":"Producto eliminado correctamente",
+    "productDeleteError":"No se pudo eliminar el producto",
+    "cartAdded":"Producto añadido al carrito",
+    "loginRequired":"Por favor, inicia sesión para usar el carrito",
+    "cartRemoved":"Producto eliminado del carrito",
+    "cartCleared":"Carrito vaciado"
+    ,"cartUpdated":"Carrito actualizado",
+    "stockExceeded":"Stock insuficiente"
+  },
+  "cart":{
+    "title":"Tu carrito",
+    "empty":"Tu carrito está vacío",
+    "total":"Total",
+    "quantity":"Cantidad",
+    "available":"disponibles",
+    "outOfStock":"Agotado",
+    "summary":"Resumen del pedido",
+    "subtotal":"Subtotal",
+    "items":"Artículos",
+    "checkout":"Proceder al pago",
+    "continueShopping":"Continuar comprando"
+  },
+  "ui":{
+    "button":"Botón",
+    "loading":"Cargando..."
+  },
+  "pagination":{
+    "previous":"Anterior",
+    "next":"Siguiente",
+    "showing":"Mostrando",
+    "of":"de",
+    "products":"productos"
+  }
+}

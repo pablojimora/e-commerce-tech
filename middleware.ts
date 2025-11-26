@@ -1,4 +1,4 @@
-// middleware.ts
+ // middleware.ts
 import { NextResponse } from "next/server";
 import type { NextRequest } from "next/server";
 import { getToken } from "next-auth/jwt";
@@ -23,7 +23,7 @@ export async function middleware(req: NextRequest) {
   }
 
   // Rutas protegidas
-  const protectedRoutes = ["/dashboard", "/sendEmail"];
+  const protectedRoutes = ["/dashboard", "/sendEmail","/dashboard/products","/dashboard/products/new"];
 
   if (protectedRoutes.some((route) => pathname.startsWith(route))) {
     if (!token) {
@@ -39,4 +39,4 @@ export async function middleware(req: NextRequest) {
 // Configuración del matcher
 export const config = {
   matcher: ["/dashboard/:path*", "/sendEmail/:path*"],
-};
+};  

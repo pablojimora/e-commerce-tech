@@ -4,9 +4,12 @@ import Link from "next/link";
 import { Menu, X } from "lucide-react"; 
 
 import styles from "./SidebarMenu.module.css";
+import { useLanguage } from "@/contexts/LanguageContext";
 
 export default function SidebarMenu() {
   const [open, setOpen] = useState(false);
+  const {t} = useLanguage();
+
 
   return (
     <>
@@ -25,14 +28,14 @@ export default function SidebarMenu() {
       {/* Menú lateral */}
       <aside className={`${styles.sidebar} ${open ? styles.open : ""}`}>
         <nav className={styles.nav}>
-          <Link href="/dashboard" onClick={() => setOpen(false)}>
-            Accessories
+          <Link href="/dashboard/products" onClick={() => setOpen(false)}>
+            {t('sidebarMenu.products')}
           </Link>
           <Link href="/dashboard" onClick={() => setOpen(false)}>
-            Celulares
+            {t('sidebarMenu.dashboard')}
           </Link>
           <Link href="/sendEmail" onClick={() => setOpen(false)}>
-            Enviar Email
+            {t('sidebarMenu.sendEmail')}
           </Link>
         </nav>
       </aside>
