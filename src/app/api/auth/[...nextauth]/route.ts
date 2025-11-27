@@ -130,6 +130,15 @@ const handler = NextAuth({
             }
             return session;
         },
+        async redirect({ url, baseUrl }) {
+            console.log('Redirect callback - url:', url, 'baseUrl:', baseUrl);
+            // Permite redirects del mismo dominio o relativos
+            if (url.startsWith("/")) return `${baseUrl}${url}`;
+            // Permite callback URLs del mismo origen
+            else if (new URL(url).origin === baseUrl) return url;
+            // Default: redirigir al dashboard
+            return `${baseUrl}/dashboard/products`;
+        },
     },
     pages: {
         signIn: "/login",

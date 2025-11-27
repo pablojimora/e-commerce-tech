@@ -4,12 +4,18 @@ import React, { useEffect, useState } from 'react';
 import Link from 'next/link';
 import { getCart } from '@/services/cart';
 import { useLanguage } from '@/contexts/LanguageContext';
+import { useSession } from 'next-auth/react';
 
 export function HeaderCart() {
   const [count, setCount] = useState<number | null>(null);
   const { t } = useLanguage();
+  const { data: session, status } = useSession();
 
   const load = async () => {
+    if (status !== 'authenticated') {
+      setCount(0);
+      return;
+    }
     const res = await getCart();
     if (res?.data) setCount(res.data.length);
     else setCount(0);
@@ -24,7 +30,7 @@ export function HeaderCart() {
       clearInterval(interval);
       window.removeEventListener('cart-updated', onUpdate);
     };
-  }, []);
+  }, [status]);
 
   return (
     <Link href="/cart" className="flex items-center gap-2">
