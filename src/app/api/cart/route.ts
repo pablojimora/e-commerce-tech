@@ -1,5 +1,6 @@
 import { NextResponse, NextRequest } from 'next/server';
 import { getServerSession } from 'next-auth';
+import { authOptions } from '@/app/lib/auth';
 import dbConnection from '@/app/lib/dbconection';
 import Users from '@/app/models/user';
 import Products from '@/app/models/products';
@@ -8,7 +9,7 @@ import mongoose from 'mongoose';
 // GET -> returns the current user's cart
 export async function GET(req: NextRequest) {
   try {
-    const session = await getServerSession();
+    const session = await getServerSession(authOptions);
     console.log('Cart GET - Session:', session ? 'exists' : 'null', (session?.user as any)?.id);
     
     if (!session?.user || !(session.user as any).id) {
@@ -47,7 +48,7 @@ export async function GET(req: NextRequest) {
 // POST -> add/update item in cart
 export async function POST(req: NextRequest) {
   try {
-    const session = await getServerSession();
+    const session = await getServerSession(authOptions);
     if (!session?.user || !(session.user as any).id) {
       return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
     }
@@ -111,7 +112,7 @@ export async function POST(req: NextRequest) {
 // DELETE -> either remove a specific product or clear entire cart
 export async function DELETE(req: NextRequest) {
   try {
-    const session = await getServerSession();
+    const session = await getServerSession(authOptions);
     if (!session?.user || !(session.user as any).id) {
       return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
     }
