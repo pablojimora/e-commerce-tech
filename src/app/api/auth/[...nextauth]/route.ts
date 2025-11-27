@@ -67,17 +67,6 @@ const handler = NextAuth({
         strategy: "jwt",
         maxAge: 30 * 24 * 60 * 60, // 30 días
     },
-    cookies: {
-        sessionToken: {
-            name: `${process.env.NODE_ENV === "production" ? "__Secure-" : ""}next-auth.session-token`,
-            options: {
-                httpOnly: true,
-                sameSite: "lax",
-                path: "/",
-                secure: process.env.NODE_ENV === "production",
-            },
-        },
-    },
     callbacks: {
         async signIn({ user, account }) {
             try {
@@ -143,7 +132,8 @@ const handler = NextAuth({
         signIn: "/login",
     },
     secret: process.env.NEXTAUTH_SECRET,
-    debug: process.env.NODE_ENV === "development",
+    useSecureCookies: process.env.NODE_ENV === "production",
+    debug: true, // Habilitar logs incluso en producción temporalmente
 });
 
 export { handler as GET, handler as POST };
