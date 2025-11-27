@@ -37,64 +37,88 @@ const handler = NextAuth({
             clientSecret: process.env.GOOGLE_CLIENT_SECRET!,
         }),
     ],
+    session: {
+        strategy: "jwt",
+        maxAge: 30 * 24 * 60 * 60, // 30 días
+    },
+    cookies: {
+        sessionToken: {
+            name: `${process.env.NODE_ENV === "production" ? "__Secure-" : ""}next-auth.session-token`,
+            options: {
+                httpOnly: true,
+                sameSite: "lax",
+                path: "/",
+                secure: process.env.NODE_ENV === "production",
+            },
+        },
+    },
+    trustHost: true,
     callbacks: {
         async signIn({ user, account }) {
-            await dbConnection();
+            try {
+                await dbConnection();
 
-            if (account?.provider === "google") {
-                let dbUser = await Users.findOne({ email: user.email });
-                if (!dbUser) {
-                    dbUser = await Users.create({
-                        email: user.email,
-                        name: user.name,
-                        role: "user",
-                    });
+                if (account?.provider === "google") {
+                    let dbUser = await Users.findOne({ email: user.email });
+                    if (!dbUser) {
+                        dbUser = await Users.create({
+                            email: user.email,
+                            name: user.name,
+                            role: "user",
+                        });
+                    }
+                    // Asignar datos del usuario de BD al objeto user para que estén disponibles en jwt callback
+                    (user as any).id = dbUser._id.toString();
+                    (user as any).role = dbUser.role || "user";
                 }
-            }
 
-            return true;
+                return true;
+            } catch (error) {
+                console.error("Error en signIn callback:", error);
+                return false;
+            }
         },
-        async jwt({ token, user }) {
-            // If there's a freshly authenticated user, attach role and id to token
+        async jwt({ token, user, account }) {
+            // Si es primera vez (user existe), asignar datos
             if (user) {
                 token.role = (user as any).role || "user";
                 token.id = (user as any).id || token.sub;
                 token.sub = (user as any).id || token.sub;
             }
 
-            // If token lacks role or id (e.g., social login where user object has no role), fetch from DB by email
+            // Si no tiene role/id, buscar en BD (fallback de seguridad)
             if ((!token.role || !token.id) && token?.email) {
                 try {
                     await dbConnection();
                     const dbUser = await Users.findOne({ email: token.email });
                     if (dbUser) {
-                        token.role = token.role || dbUser.role || "user";
-                        token.id = token.id || dbUser._id.toString();
-                        token.sub = token.sub || dbUser._id.toString();
+                        token.role = dbUser.role || "user";
+                        token.id = dbUser._id.toString();
+                        token.sub = dbUser._id.toString();
                     }
                 } catch (err) {
-                    // ignore DB errors here - token will proceed without role
+                    console.error("Error fetching user in jwt callback:", err);
                 }
             }
 
             return token;
         },
         async session({ session, token }) {
-            return {
-                ...session,
-                user: {
+            if (session.user) {
+                session.user = {
                     ...session.user,
-                    id: token.sub,
-                    role: token.role,
-                },
-            };
-        }
-        ,
+                    id: token.id || token.sub,
+                    role: token.role || "user",
+                };
+            }
+            return session;
+        },
     },
     pages: {
         signIn: "/login",
     },
     secret: process.env.NEXTAUTH_SECRET,
+    debug: process.env.NODE_ENV === "development",
 });
 
 export { handler as GET, handler as POST };
