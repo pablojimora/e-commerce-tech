@@ -1,5 +1,5 @@
 import { NextResponse, NextRequest } from 'next/server';
-import { getToken } from 'next-auth/jwt';
+import { getServerSession } from 'next-auth';
 import dbConnection from '@/app/lib/dbconection';
 import Users from '@/app/models/user';
 import Products from '@/app/models/products';
@@ -8,16 +8,17 @@ import mongoose from 'mongoose';
 // GET -> returns the current user's cart
 export async function GET(req: NextRequest) {
   try {
-    const token = await getToken({ req, secret: process.env.NEXTAUTH_SECRET });
-    console.log('Cart GET - Token:', token ? 'exists' : 'null', token?.sub);
+    const session = await getServerSession();
+    console.log('Cart GET - Session:', session ? 'exists' : 'null', (session?.user as any)?.id);
     
-    if (!token || !token.sub) {
-      console.log('Cart GET - Unauthorized: no token or sub');
+    if (!session?.user || !(session.user as any).id) {
+      console.log('Cart GET - Unauthorized: no session or user id');
       return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
     }
 
     await dbConnection();
-    const user: any = await Users.findById(token.sub).lean();
+    const userId = (session.user as any).id;
+    const user: any = await Users.findById(userId).lean();
     if (!user) return NextResponse.json({ error: 'User not found' }, { status: 404 });
 
     // Enriquecer con stock actual de productos
@@ -46,8 +47,10 @@ export async function GET(req: NextRequest) {
 // POST -> add/update item in cart
 export async function POST(req: NextRequest) {
   try {
-    const token = await getToken({ req, secret: process.env.NEXTAUTH_SECRET });
-    if (!token || !token.sub) return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
+    const session = await getServerSession();
+    if (!session?.user || !(session.user as any).id) {
+      return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
+    }
 
     const body = await req.json();
     const { productId, quantity = 1, replace = false } = body as { productId: string; quantity?: number; replace?: boolean };
@@ -59,7 +62,8 @@ export async function POST(req: NextRequest) {
     const product: any = await Products.findById(productId).lean();
     if (!product) return NextResponse.json({ error: 'Product not found' }, { status: 404 });
 
-    const user: any = await Users.findById(token.sub);
+    const userId = (session.user as any).id;
+    const user: any = await Users.findById(userId);
     if (!user) return NextResponse.json({ error: 'User not found' }, { status: 404 });
 
     const existing = user.cart?.find((c: any) => c.productId.toString() === productId);
@@ -107,14 +111,17 @@ export async function POST(req: NextRequest) {
 // DELETE -> either remove a specific product or clear entire cart
 export async function DELETE(req: NextRequest) {
   try {
-    const token = await getToken({ req, secret: process.env.NEXTAUTH_SECRET });
-    if (!token || !token.sub) return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
+    const session = await getServerSession();
+    if (!session?.user || !(session.user as any).id) {
+      return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
+    }
 
     const url = new URL(req.url);
     const productId = url.searchParams.get('productId');
 
     await dbConnection();
-    const user: any = await Users.findById(token.sub);
+    const userId = (session.user as any).id;
+    const user: any = await Users.findById(userId);
     if (!user) return NextResponse.json({ error: 'User not found' }, { status: 404 });
 
     if (productId) {
