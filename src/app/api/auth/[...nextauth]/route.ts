@@ -52,7 +52,6 @@ const handler = NextAuth({
             },
         },
     },
-    trustHost: true,
     callbacks: {
         async signIn({ user, account }) {
             try {
