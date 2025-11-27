@@ -94,10 +94,10 @@ export const Cart: React.FC = () => {
           {/* Lista de productos */}
           <div className="lg:col-span-2 space-y-4">
             {items.map((it) => (
-              <div key={it.productId} className="bg-gradient-to-r from-[#0f0f0f] to-[#1a1a1a] rounded-xl shadow-xl border border-gray-800 overflow-hidden hover:border-gray-700 transition">
+              <div key={it.productId} className="bg-linear-to-r from-[#0f0f0f] to-[#1a1a1a] rounded-xl shadow-xl border border-gray-800 overflow-hidden hover:border-gray-700 transition">
                 <div className="flex flex-col md:flex-row gap-4 p-6">
                   {/* Imagen del producto */}
-                  <div className="w-full md:w-32 h-32 relative flex-shrink-0 rounded-lg overflow-hidden bg-gray-900">
+                  <div className="w-full md:w-32 h-32 relative shrink-0 rounded-lg overflow-hidden bg-gray-900">
                     <Image 
                       src={it.imageUrl || '/placeholder.png'} 
                       alt={it.name} 
@@ -169,7 +169,7 @@ export const Cart: React.FC = () => {
 
           {/* Resumen del pedido */}
           <div className="lg:col-span-1">
-            <div className="bg-gradient-to-br from-[#0f0f0f] to-[#1a1a2a] rounded-xl shadow-xl border border-gray-800 p-6 sticky top-6">
+            <div className="bg-linear-to-r from-[#0f0f0f] to-[#1a1a2a] rounded-xl shadow-xl border border-gray-800 p-6 sticky top-6">
               <h2 className="text-2xl font-bold text-white mb-6">{t('cart.summary') || 'Resumen'}</h2>
               
               <div className="space-y-4 mb-6">
@@ -194,7 +194,7 @@ export const Cart: React.FC = () => {
                 variant="primary"
                 size="lg"
                 text={t('cart.checkout') || 'Proceder al pago'}
-                className="w-full bg-gradient-to-r from-blue-600 to-purple-600 text-white py-4 rounded-lg font-bold text-lg hover:from-blue-700 hover:to-purple-700 transition transform hover:scale-105 border-0"
+                className="w-full bg-linear-to-r from-blue-600 to-purple-600 text-white py-4 rounded-lg font-bold text-lg hover:from-blue-700 hover:to-purple-700 transition transform hover:scale-105 border-0"
               />
               
               <a 

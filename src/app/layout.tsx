@@ -49,7 +49,6 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
               <div className="mr-3">
                 <HeaderCart />
               </div>
-              <HeaderSession />
             </div>
           </header>
 

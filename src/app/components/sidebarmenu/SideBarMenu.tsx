@@ -5,6 +5,7 @@ import { Menu, X } from "lucide-react";
 
 import styles from "./SidebarMenu.module.css";
 import { useLanguage } from "@/contexts/LanguageContext";
+import HeaderSession from "../headerSession/HeaderSession";
 
 export default function SidebarMenu() {
   const [open, setOpen] = useState(false);
@@ -38,6 +39,10 @@ export default function SidebarMenu() {
             {t('sidebarMenu.sendEmail')}
           </Link>
         </nav>
+        
+        <div>
+          <HeaderSession />
+        </div>
       </aside>
     </>
   );
