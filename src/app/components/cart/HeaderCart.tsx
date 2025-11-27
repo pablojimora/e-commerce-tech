@@ -12,6 +12,9 @@ export function HeaderCart() {
   const { data: session, status } = useSession();
 
   const load = async () => {
+    if (status === 'loading') {
+      return; // No hacer nada mientras se carga la sesión
+    }
     if (status !== 'authenticated') {
       setCount(0);
       return;
@@ -22,9 +25,20 @@ export function HeaderCart() {
   };
 
   useEffect(() => {
-    load();
-    const interval = setInterval(load, 10000);
-    const onUpdate = () => load();
+    // Solo cargar si no está en loading
+    if (status !== 'loading') {
+      load();
+    }
+    const interval = setInterval(() => {
+      if (status === 'authenticated') {
+        load();
+      }
+    }, 10000);
+    const onUpdate = () => {
+      if (status === 'authenticated') {
+        load();
+      }
+    };
     window.addEventListener('cart-updated', onUpdate);
     return () => {
       clearInterval(interval);
