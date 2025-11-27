@@ -9,7 +9,12 @@ import mongoose from 'mongoose';
 export async function GET(req: NextRequest) {
   try {
     const token = await getToken({ req, secret: process.env.NEXTAUTH_SECRET });
-    if (!token || !token.sub) return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
+    console.log('Cart GET - Token:', token ? 'exists' : 'null', token?.sub);
+    
+    if (!token || !token.sub) {
+      console.log('Cart GET - Unauthorized: no token or sub');
+      return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
+    }
 
     await dbConnection();
     const user: any = await Users.findById(token.sub).lean();

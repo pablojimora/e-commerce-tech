@@ -98,6 +98,7 @@ const handler = NextAuth({
                 token.role = (user as any).role || "user";
                 token.id = (user as any).id || token.sub;
                 token.sub = (user as any).id || token.sub;
+                console.log('JWT callback - User exists, token.sub:', token.sub);
             }
 
             // Si no tiene role/id, buscar en BD (fallback de seguridad)
@@ -109,6 +110,7 @@ const handler = NextAuth({
                         token.role = dbUser.role || "user";
                         token.id = dbUser._id.toString();
                         token.sub = dbUser._id.toString();
+                        console.log('JWT callback - Fetched from DB, token.sub:', token.sub);
                     }
                 } catch (err) {
                     console.error("Error fetching user in jwt callback:", err);
@@ -118,6 +120,7 @@ const handler = NextAuth({
             return token;
         },
         async session({ session, token }) {
+            console.log('Session callback - token.sub:', token.sub, 'token.id:', token.id);
             if (session.user) {
                 session.user = {
                     ...session.user,
